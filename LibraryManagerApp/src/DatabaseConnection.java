@@ -17,11 +17,9 @@ public class DatabaseConnection {
         String db_password = "password";
         this.connection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/" + name, db_username, db_password);
-        System.out.println(connection);
     }
 
     public Connection getConnection() {
-        System.out.print("get connection");
         return this.connection;
     }
 
