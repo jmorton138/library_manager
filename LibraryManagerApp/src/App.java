@@ -1,7 +1,11 @@
+import java.sql.*;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        System.out.println("Login!");
-        CreateLoginForm loginPage = new CreateLoginForm();
+        DatabaseConnection dbConnection = new DatabaseConnection("library_db");
+        Connection connection = dbConnection.getConnection();
+        // LoginForm loginPage = new LoginForm();
+        HomePage home = new HomePage(connection);
+        home.setVisible(true);
     }
 }
