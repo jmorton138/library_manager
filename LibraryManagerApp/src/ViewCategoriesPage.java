@@ -17,28 +17,22 @@ public class ViewCategoriesPage extends NewPage {
 
     public void viewCategories() throws SQLException {
 
-        JPanel panel = new JPanel();
-        panel.setSize(400, 400);
-        panel.setLayout(null);
-        panel.setBackground(new Color(0, 251, 246));
-
+        JPanel buttonPanel = new JPanel();
         Statement statement = this.conn.createStatement();
         String getCategoriesQuery = "select * from category";
         ResultSet resultSet = statement.executeQuery(getCategoriesQuery);
-        Integer y_coord = 50;
         while (resultSet.next()) {
             String category = resultSet.getString("name");
-            System.out.println(category);
             Button categoryBtn = new Button(category);
-            categoryBtn.setBounds(100, y_coord, 250, 50);
-            y_coord += 80;
             categoryBtn.addActionListener(btnAction -> {
                 System.out.println(categoryBtn.getText());
             });
-            panel.add(categoryBtn);
-
+            buttonPanel.add(categoryBtn);
         }
-        this.add(panel);
+        GridLayout layout = new GridLayout(0, 1);
+        layout.setVgap(10);
+        buttonPanel.setLayout(layout);
+        this.centerPanel.add(buttonPanel);
     }
 
 }
