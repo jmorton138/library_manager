@@ -9,14 +9,13 @@ public class ViewCategoriesPage extends NewPage {
     Connection conn;
     JPanel categoriesList;
 
-    ViewCategoriesPage(Connection conn) {
+    public ViewCategoriesPage(Connection conn) {
         this.conn = conn;
         this.setVisible(true);
         this.setTitle("View Categories");
     }
 
     public void viewCategories() throws SQLException {
-
         JPanel buttonPanel = new JPanel();
         Statement statement = this.conn.createStatement();
         String getCategoriesQuery = "select * from category";
@@ -25,7 +24,13 @@ public class ViewCategoriesPage extends NewPage {
             String category = resultSet.getString("name");
             Button categoryBtn = new Button(category);
             categoryBtn.addActionListener(btnAction -> {
-                System.out.println(categoryBtn.getText());
+                ViewBooksPage viewBooksPage = new ViewBooksPage(this.conn, category);
+                try {
+                    viewBooksPage.viewBooks();
+
+                } catch (SQLException throwables) {
+                    System.out.println(throwables.getLocalizedMessage());
+                }
             });
             buttonPanel.add(categoryBtn);
         }
