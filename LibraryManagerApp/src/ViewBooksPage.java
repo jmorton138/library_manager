@@ -8,20 +8,29 @@ import javax.swing.border.EmptyBorder;
 public class ViewBooksPage extends NewPage {
     Connection connection;
     String category;
+    String getBooksQuery;
+
+    ViewBooksPage(Connection connection) {
+        this.connection = connection;
+        this.setVisible(true);
+        this.setTitle(String.format("Books"));
+        this.getBooksQuery = "select * from book";
+    }
 
     ViewBooksPage(Connection connection, String category) {
         this.connection = connection;
         this.category = category;
         this.setVisible(true);
         this.setTitle(String.format("%s Books", category));
+        this.getBooksQuery = String.format(
+                "select * from book left join category on book.category_id=category.id where category.name='%s'",
+                category);
     }
 
     public void viewBooks() throws SQLException {
         Statement statement = connection.createStatement();
-        String getBooksQuery = String.format(
-                "select * from book left join category on book.category_id=category.id where category.name='%s'",
-                category);
-        ResultSet resultSet = statement.executeQuery(getBooksQuery);
+
+        ResultSet resultSet = statement.executeQuery(this.getBooksQuery);
         JPanel buttonPanel = new JPanel();
         while (resultSet.next()) {
             JPanel bookCard = new JPanel();
