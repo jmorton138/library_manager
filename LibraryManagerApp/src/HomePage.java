@@ -6,6 +6,7 @@ import java.sql.*;
 
 public class HomePage extends NewPage {
     Button categoryButton;
+    Button addCategory;
     Button booksButton;
     Button authorsButton;
     Button issueBookButton;
@@ -17,15 +18,12 @@ public class HomePage extends NewPage {
         this.conn = conn;
         navPanel = new JPanel();
         navPanel.setLayout(null);
-        categoryButton = new Button("Category");
-        categoryButton.addActionListener(categoryClick -> {
-            ViewCategoriesPage viewCategoriesPage = new ViewCategoriesPage(conn);
-            try {
-                viewCategoriesPage.viewCategories();
-            } catch (SQLException throwables) {
-                System.out.println(throwables.getLocalizedMessage());
+        addCategory = new Button("Add Category");
 
-            }
+        addCategory.addActionListener(addCategoryClick -> {
+            CategoryPage categoryPage = new CategoryPage(conn);
+            categoryPage.setVisible(true);
+
         });
 
         booksButton = new Button("Books");
@@ -47,7 +45,7 @@ public class HomePage extends NewPage {
         GridLayout layout = new GridLayout(0, 1);
         layout.setVgap(10);
         navPanel.setLayout(layout);
-        navPanel.add(categoryButton);
+        navPanel.add(addCategory);
         navPanel.add(booksButton);
         navPanel.add(authorsButton);
         navPanel.add(issueBookButton);
