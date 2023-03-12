@@ -84,9 +84,6 @@ public class CategoryPage extends NewPage {
         formPanel.add(categoryVal);
         formPanel.add(categoryStatusLabel);
         formPanel.add(categoryStatusVal);
-        formPanel.add(addCategoryBtn);
-        formPanel.add(deleteCategoryBtn);
-        formPanel.add(editCategoryBtn);
         this.centerPanel.add(formPanel);
 
         JPanel buttonPanel = new JPanel();
@@ -96,6 +93,9 @@ public class CategoryPage extends NewPage {
         backButton.addActionListener(actionListener -> {
             this.dispose();
         });
+        buttonPanel.add(addCategoryBtn);
+        buttonPanel.add(deleteCategoryBtn);
+        buttonPanel.add(editCategoryBtn);
         buttonPanel.add(backButton);
         buttonPanel.setBackground(new Color(254, 251, 246));
         this.southPanel.add(buttonPanel);
@@ -105,13 +105,11 @@ public class CategoryPage extends NewPage {
     public void addCategory(String category, String status) throws SQLException {
         // TODO: Error popup and validity conditions
         if (category.length() == 0) {
-            System.out.println("Please enter a valid category");
+            new ErrorPopup("Please enter a non empty category");
             return;
         }
         Statement statement = this.conn.createStatement();
         String query = String.format("insert into category (name, status) values('%s', '%s')", category, status);
-        // TODO: no empty strings
-
         try {
             statement.executeUpdate(query);
 
@@ -128,6 +126,12 @@ public class CategoryPage extends NewPage {
         Statement statement = this.conn.createStatement();
         String getCategoriesQuery = "select * from category";
         ResultSet resultSet = statement.executeQuery(getCategoriesQuery);
+        JLabel idHeader = new JLabel("ID");
+        JLabel categoryHeader = new JLabel("Category");
+        JLabel statusHeader = new JLabel("Status");
+        categoryPanel.add(idHeader);
+        categoryPanel.add(categoryHeader);
+        categoryPanel.add(statusHeader);
         while (resultSet.next()) {
             String categoryId = resultSet.getString("id");
             JLabel categoryIdLabel = new JLabel(categoryId);
@@ -167,11 +171,12 @@ public class CategoryPage extends NewPage {
             ResultSet resultSet = statement.executeQuery(getCategoryQuery);
             if (resultSet.next()) {
                 categoryID = resultSet.getInt("id");
-
                 String editCategoryQuery = String.format("update category set status='%s' where id=%d", status,
                         categoryID);
                 statement.execute(editCategoryQuery);
 
+            } else {
+                new ErrorPopup("Please enter an existing category for edit");
             }
 
         } catch (SQLException throwables) {
